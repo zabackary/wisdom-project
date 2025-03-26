@@ -7,11 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -51,11 +47,15 @@
       #loading-progress {
         width: 156px;
         height: 24px;
-        top: 426px;
-        left: 408px;
-        color: #fff;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ffa5a8;
+        background-color: #000;
         text-align: center;
-        font-family: "Pixelify Sans", serif;
+        font-family: "Titillium Web", serif;
+        border-radius: 999px;
+        overflow: hidden;
       }
       #loading-progress::before {
         position: absolute;
@@ -64,7 +64,7 @@
         left: 0;
         height: 100%;
         width: calc(100% * var(--progress));
-        background-color: #ed1c24;
+        background-color: #ffa5a8;
         transition: width 0.2s;
       }
     </style>
@@ -72,8 +72,7 @@
   <body>
     <div class="container">
       <div class="loading-container">
-        <img src="assets/loading/1.png" />
-        <div id="loading-progress" style="--progress: 0">loading...</div>
+        <div id="loading-progress" style="--progress: 0">LOADING</div>
       </div>
       <canvas></canvas>
     </div>

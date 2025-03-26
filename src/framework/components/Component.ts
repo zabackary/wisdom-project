@@ -38,6 +38,13 @@ export async function translateBounds(
   context.beginPath();
   context.rect(0, 0, bounds.width, bounds.height);
   context.clip();
+  // debug
+  context.beginPath();
+  context.rect(0, 0, bounds.width, bounds.height);
+  context.strokeStyle = "red";
+  context.lineWidth = 3;
+  context.stroke();
+  // end debug
   await fn();
   context.restore();
 }
@@ -46,6 +53,8 @@ export default abstract class Component {
   abstract get assets(): Asset[];
   abstract render(context: CanvasRenderingContext2D): Promise<void>;
   abstract update(updateInfo: UpdateInfo): void;
+
+  prerenderHook?(context: CanvasRenderingContext2D): void;
 }
 
 export type ComponentLike = Renderable | Renderable[];
