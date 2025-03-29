@@ -17,11 +17,11 @@ export default class ScrollingContainer extends Container {
       context,
       this.bounds,
       async () => {
+        context.scale(this.zoom, this.zoom);
         context.translate(
           this.inversionEffect ? this.scrollX : -this.scrollX,
           -this.scrollY
         );
-        context.scale(this.zoom, this.zoom);
         for (const child of this.children) {
           await child.render(context);
         }

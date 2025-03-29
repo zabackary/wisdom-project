@@ -29,8 +29,8 @@ export default class TimeBasedAnimationController extends Controller<number> {
   constructor(
     private curve: keyof typeof EASING_CURVES,
     private durationMs: number,
-    private rangeMin: number,
-    private rangeMax: number,
+    public rangeMin: number,
+    public rangeMax: number,
     private immediateStart: boolean = false,
     private repeat: boolean = false,
     private defaultCallbackValue: number | null = null
@@ -113,5 +113,10 @@ export default class TimeBasedAnimationController extends Controller<number> {
       EASING_CURVES[this.curve](timeElapsedFraction) *
         (this.rangeMax - this.rangeMin);
     return this.value;
+  }
+
+  resetCallbacks() {
+    this.startObservers = [];
+    this.finishObservers = [];
   }
 }

@@ -10,12 +10,11 @@ import PretendCallbackAnimationController from "../../utils/PretendCallbackAnima
 import sequenceAnimations from "../../utils/sequenceAnimations";
 
 export default function introScene(onComplete: () => void) {
-  let scrimAnimation = new TimeBasedAnimationController(
-    "ease-in",
-    2000,
-    0,
-    1
-  ).onFinish(onComplete);
+  let scrimAnimation = new TimeBasedAnimationController("ease-in", 2000, 0, 1)
+    .observe((x) => {
+      thisIsText.setOpacity(1 - x);
+    })
+    .onFinish(onComplete);
   let blackBackgroundAlpha = 1;
   let dotsAlpha = 0;
   let dotsGray = 1;
@@ -190,7 +189,7 @@ export default function introScene(onComplete: () => void) {
       1
     ).observeWhileRunning((x) => {
       container.setZoom(1 - x * 0.7);
-      container.setScroll((-x * CANVAS_WIDTH) / 2, 0);
+      container.setScroll(-x * CANVAS_WIDTH * 2, 0);
     }),
     new FadingTextComponent(
       "And as we go about daily life, people and places express bias because of those differences.",
@@ -222,6 +221,10 @@ export default function introScene(onComplete: () => void) {
       "This is racial discrimination.",
       10000
     )),
+    new FadingTextComponent(
+      "Like the slope causing the bouncing balls to bounce in different directions, unconscious and conscious judgments are made towards people because of their properties.",
+      6000
+    ).onClose(onComplete),
   ];
 
   sequenceAnimations(animations);
@@ -302,11 +305,6 @@ export default function introScene(onComplete: () => void) {
         height: CANVAS_HEIGHT,
       }
     )),
-    ...animations.map((animation) =>
-      animation instanceof TimeBasedAnimationController
-        ? animation.listener()
-        : animation
-    ),
     (ctx: CanvasRenderingContext2D) => {
       const oldAlpha = ctx.globalAlpha;
       ctx.globalAlpha = oldAlpha * scrimAnimation.value;
@@ -314,6 +312,11 @@ export default function introScene(onComplete: () => void) {
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       ctx.globalAlpha = oldAlpha;
     },
+    ...animations.map((animation) =>
+      animation instanceof TimeBasedAnimationController
+        ? animation.listener()
+        : animation
+    ),
     scrimAnimation.listener(),
     growTextAnimation.listener(),
   ];
