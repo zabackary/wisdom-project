@@ -1,5 +1,6 @@
+import { Match } from "../framework/components/conditionals";
 import introScene from "./levels/intro";
-import StateRecreationMatch from "./utils/StateRecreationMatch";
+import startScreen from "./levels/startScreen";
 
 export const PIXEL_ART_SIZE = 6;
 export const PIXELS_PER_METER = 32 * 6;
@@ -9,11 +10,15 @@ export const FONT = '"Titillium Web"';
 export const PROSE_FONT = '"Newsreader"';
 
 export default function gameRoot() {
-  const level = "intro";
-  let match: StateRecreationMatch;
+  const level = "startScreen";
+  let match: Match;
   return [
-    (match = new StateRecreationMatch(
+    (match = new Match(
       {
+        startScreen: () =>
+          startScreen(() => {
+            match.set("intro");
+          }),
         intro: () =>
           introScene(() => {
             // match.set("select");

@@ -24,6 +24,7 @@ export default class TimeBasedAnimationController extends Controller<number> {
   finished: boolean = false;
   startTime: number | null = null;
   value: number;
+  private delayMs?: number;
 
   constructor(
     private curve: keyof typeof EASING_CURVES,
@@ -50,11 +51,26 @@ export default class TimeBasedAnimationController extends Controller<number> {
     return this;
   }
 
+  observeWhileRunning(callback: (value: number) => void): this {
+    this.observe((x) => {
+      if (this.started && !this.finished) {
+        callback(x);
+      }
+    });
+    return this;
+  }
+
   start() {
     this.started = true;
     this.finished = false;
     this.startTime = new Date().getTime();
     this.startObservers.forEach((item) => item());
+    return this;
+  }
+
+  startWithDelay(delayMs: number) {
+    this.delayMs = delayMs;
+    return this;
   }
 
   private hasUpdated: boolean = false;
@@ -63,6 +79,12 @@ export default class TimeBasedAnimationController extends Controller<number> {
       this.hasUpdated = true;
       if (this.immediateStart) {
         this.start();
+      }
+      if (this.delayMs !== undefined) {
+        setTimeout(() => {
+          this.start();
+        }, this.delayMs);
+        this.delayMs = undefined;
       }
     }
     if (!this.started)

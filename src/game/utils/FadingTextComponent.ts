@@ -2,27 +2,41 @@ import { UpdateInfo } from "../../framework/components/Component";
 import Container from "../../framework/components/Container";
 import InterruptableAnimationController from "../../framework/controllers/InterruptableAnimationController";
 import { CANVAS_HEIGHT, CANVAS_WIDTH, FONT } from "../gameRoot";
+import { wrapCanvasLines } from "./MessageComponent";
 
 export default class FadingTextComponent extends Container {
   private animationController: InterruptableAnimationController;
 
   public isShowing: boolean = false;
 
-  constructor(title: string, private durationMs: number) {
+  constructor(
+    title: string,
+    private durationMs: number,
+    public fontSize: number = 34,
+    public textColor: string = "#fff",
+    public backgroundColor: string = "#000",
+    public backgroundAlpha: number = 0.3
+  ) {
     const animationController = new InterruptableAnimationController(
       "ease-in-out",
       1000,
       0
     );
-    let checkContainer: Container;
     const animatedContainer = new Container(
       [
         (ctx) => {
-          ctx.fillStyle = "#fff";
-          ctx.font = `34px ${FONT}`;
+          ctx.fillStyle = this.textColor;
+          ctx.font = `${this.fontSize}px ${FONT}`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.fillText(title, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+          const lines = wrapCanvasLines(ctx, title, CANVAS_WIDTH - 40);
+          lines.forEach((line, index) => {
+            ctx.fillText(
+              line,
+              CANVAS_WIDTH / 2,
+              CANVAS_HEIGHT / 2 + (index - lines.length / 2) * 40 + 20
+            );
+          });
         },
       ],
       {
@@ -32,13 +46,13 @@ export default class FadingTextComponent extends Container {
         height: CANVAS_HEIGHT,
       }
     );
-    let backgroundAlpha = 0;
+    let alphaAnimation = 0;
     super(
       [
         (ctx) => {
           const oldAlpha = ctx.globalAlpha;
-          ctx.globalAlpha = oldAlpha * backgroundAlpha;
-          ctx.fillStyle = "#000";
+          ctx.globalAlpha = oldAlpha * this.backgroundAlpha * alphaAnimation;
+          ctx.fillStyle = this.backgroundColor;
           ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
           ctx.globalAlpha = oldAlpha;
         },
@@ -60,7 +74,8 @@ export default class FadingTextComponent extends Container {
         height: CANVAS_HEIGHT,
       });
       animatedContainer.setOpacity(value);
-      backgroundAlpha = value * 0.3;
+      alphaAnimation = value;
+      animatedContainer.setDisableChildUpdates(value === 0);
     });
     this.animationController = animationController;
   }

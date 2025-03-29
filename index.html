@@ -25,6 +25,8 @@
       }
       .container {
         position: fixed;
+        border-radius: 12px;
+        overflow: hidden;
       }
       #loading-progress,
       .loading-container,
@@ -66,13 +68,14 @@
         width: calc(100% * var(--progress));
         background-color: #ffa5a8;
         transition: width 0.2s;
+        border-radius: 999px;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="loading-container">
-        <div id="loading-progress" style="--progress: 0">LOADING</div>
+        <div id="loading-progress" style="--progress: 0">loading</div>
       </div>
       <canvas></canvas>
     </div>

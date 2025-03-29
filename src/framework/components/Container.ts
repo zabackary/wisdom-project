@@ -1,3 +1,4 @@
+import Controller from "../controllers/Controller";
 import Component, {
   ComponentLike,
   Rect,
@@ -61,6 +62,15 @@ export default class Container extends Component {
     this.children.forEach((child) => {
       child.update(translatedUpdateInfo);
     });
+  }
+
+  addController<T>(
+    controller: Controller<T>,
+    fn: (this: this, output: T) => void
+  ): this {
+    controller.observe(fn.bind(this));
+    this.children.push(controller.listener());
+    return this;
   }
 
   setBounds(newBounds: Partial<Rect>): this {

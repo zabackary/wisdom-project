@@ -1,4 +1,8 @@
-import Component, { ComponentLike, UpdateInfo } from "./components/Component";
+import Component, {
+  ComponentLike,
+  toggleDebug,
+  UpdateInfo,
+} from "./components/Component";
 import { normalizeComponent } from "./components/FunctionComponent";
 import warpCtx from "./effects/warpCtx";
 
@@ -8,10 +12,16 @@ export function setGlobalWarp(deg: number) {
   globalWarp = deg;
 }
 
+export enum MouseButton {
+  Primary = 0,
+  Secondary = 2,
+  Middle = 1,
+}
+
 export default class Game {
   private context: CanvasRenderingContext2D;
 
-  private mouseClickedEventQueue: true[] = [];
+  private mouseClickedEventQueue: MouseButton[] = [];
   private keyboardEventQueue: string[] = [];
   private pressingKeys: string[] = [];
 
@@ -22,15 +32,22 @@ export default class Game {
 
   constructor(private canvas: HTMLCanvasElement, rootComponent: ComponentLike) {
     this.rootComponent = normalizeComponent(rootComponent);
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
     this.context = canvas.getContext("2d")!;
   }
 
   registerHandlers() {
-    this.canvas.addEventListener("click", () => {
-      this.mouseClickedEventQueue.push(true);
+    const handleMouseEvent = (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const button = e.button;
+      this.mouseClickedEventQueue.push(button);
+    };
+    this.canvas.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
     });
+    this.canvas.addEventListener("mouseup", handleMouseEvent);
     window.addEventListener("keydown", (e) => {
       this.keyboardEventQueue.push(e.key);
       if (!this.pressingKeys.includes(e.key)) this.pressingKeys.push(e.key);
@@ -46,20 +63,29 @@ export default class Game {
 
   async gameLoop() {
     this.context.reset();
+    this.context.scale(window.devicePixelRatio, window.devicePixelRatio);
     this.context.fillStyle = "#fff";
     this.context.fillRect(0, 0, 99999, 99999);
     this.context.imageSmoothingEnabled = false;
+    this.canvas.style.cursor = "initial";
     const updateInfo: UpdateInfo = {
       mouse: {
         x: this.mouseX,
         y: this.mouseY,
-        clicked: this.mouseClickedEventQueue.pop() ?? false,
+        clicked: this.mouseClickedEventQueue.pop(),
+        setCursor: (cursor: string) => {
+          this.canvas.style.cursor = cursor;
+        },
       },
       keyboard: {
         pressedKey: this.keyboardEventQueue.pop() ?? null,
         pressingKeys: this.pressingKeys,
       },
     };
+    // for debugging
+    if (updateInfo.mouse.clicked === MouseButton.Middle) {
+      toggleDebug();
+    }
     this.rootComponent.update(updateInfo);
     await this.rootComponent.render(this.context);
     if (globalWarp !== 0) {

@@ -24,6 +24,10 @@ export default class InterruptableAnimationController extends Controller<number>
     this.targetValue = newValue;
   }
 
+  currentTargetValue(): number {
+    return this.targetValue;
+  }
+
   updateCallback(): number {
     // in theory, we can't jump back in time, so only clamping on the top bound
     const timeElapsedFraction = Math.min(

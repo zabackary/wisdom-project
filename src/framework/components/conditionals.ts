@@ -72,6 +72,8 @@ export class Match extends Component {
     if (!Object.hasOwn(this.map, newKey)) {
       throw new Error("supplied key to Match isn't in map");
     }
-    this.key = newKey;
+    requestAnimationFrame(() => {
+      this.key = newKey;
+    });
   }
 }

@@ -4,6 +4,7 @@ import Container from "./Container";
 export default class ScrollingContainer extends Container {
   scrollX: number = 0;
   scrollY: number = 0;
+  zoom: number = 1;
 
   constructor(children: ComponentLike[], bounds: Rect) {
     super(children, bounds);
@@ -20,6 +21,7 @@ export default class ScrollingContainer extends Container {
           this.inversionEffect ? this.scrollX : -this.scrollX,
           -this.scrollY
         );
+        context.scale(this.zoom, this.zoom);
         for (const child of this.children) {
           await child.render(context);
         }
@@ -58,6 +60,11 @@ export default class ScrollingContainer extends Container {
   setScroll(x: number, y: number): this {
     this.scrollX = Math.floor(x);
     this.scrollY = Math.floor(y);
+    return this;
+  }
+
+  setZoom(zoom: number): this {
+    this.zoom = zoom;
     return this;
   }
 }

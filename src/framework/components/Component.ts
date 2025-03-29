@@ -1,11 +1,13 @@
 import Asset from "../Asset";
+import { MouseButton } from "../Game";
 import { Renderable } from "./FunctionComponent";
 
 export interface UpdateInfo {
   mouse: {
     x: number;
     y: number;
-    clicked: boolean;
+    clicked?: MouseButton;
+    setCursor: (cursor: string) => void;
   };
   keyboard: {
     pressedKey: string | null;
@@ -18,6 +20,12 @@ export interface Rect {
   y: number;
   width: number;
   height: number;
+}
+
+let debug = false;
+
+export function toggleDebug() {
+  debug = !debug;
 }
 
 export async function translateBounds(
@@ -38,14 +46,14 @@ export async function translateBounds(
   context.beginPath();
   context.rect(0, 0, bounds.width, bounds.height);
   context.clip();
-  // debug
-  context.beginPath();
-  context.rect(0, 0, bounds.width, bounds.height);
-  context.strokeStyle = "red";
-  context.lineWidth = 3;
-  context.stroke();
-  // end debug
   await fn();
+  if (debug) {
+    context.beginPath();
+    context.rect(0, 0, bounds.width, bounds.height);
+    context.strokeStyle = "red";
+    context.lineWidth = 3;
+    context.stroke();
+  }
   context.restore();
 }
 
@@ -53,8 +61,6 @@ export default abstract class Component {
   abstract get assets(): Asset[];
   abstract render(context: CanvasRenderingContext2D): Promise<void>;
   abstract update(updateInfo: UpdateInfo): void;
-
-  prerenderHook?(context: CanvasRenderingContext2D): void;
 }
 
 export type ComponentLike = Renderable | Renderable[];

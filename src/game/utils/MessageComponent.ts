@@ -1,6 +1,9 @@
 import { UpdateInfo } from "../../framework/components/Component";
 import Container from "../../framework/components/Container";
-import ImageComponent from "../../framework/components/ImageComponent";
+import {
+  HorizontalAlignment,
+  VerticalAlignment,
+} from "../../framework/components/TextComponent";
 import InterruptableAnimationController from "../../framework/controllers/InterruptableAnimationController";
 import {
   CANVAS_HEIGHT,
@@ -9,7 +12,7 @@ import {
   PIXEL_ART_SIZE,
   PROSE_FONT,
 } from "../gameRoot";
-import labeledImageButton from "./labeledImageButton";
+import RoundedButtonComponent from "./RoundedButtonComponent";
 
 /**
  * Wraps lines on a canvas, TS version of https://stackoverflow.com/a/16599668
@@ -56,13 +59,41 @@ export default class MessageComponent extends Container {
     let checkContainer: Container;
     const animatedContainer = new Container(
       [
-        new ImageComponent("assets/shared/paper.png", {
-          x: 0,
-          y: 0,
-          width: CANVAS_WIDTH,
-          height: CANVAS_HEIGHT,
-        }),
         (ctx) => {
+          // rounded rectangle background (only top two corners, 40px radius)
+          const BORDER_RADIUS = 40;
+          const HORIZONTAL_INSET = 220;
+          const VERTICAL_INSET = 120;
+
+          ctx.fillStyle = "#eee";
+          ctx.beginPath();
+          ctx.moveTo(HORIZONTAL_INSET, CANVAS_HEIGHT);
+          ctx.lineTo(CANVAS_WIDTH - HORIZONTAL_INSET, CANVAS_HEIGHT);
+          ctx.lineTo(
+            CANVAS_WIDTH - HORIZONTAL_INSET,
+            VERTICAL_INSET + BORDER_RADIUS
+          );
+          ctx.arc(
+            CANVAS_WIDTH - HORIZONTAL_INSET - BORDER_RADIUS,
+            VERTICAL_INSET + BORDER_RADIUS,
+            BORDER_RADIUS,
+            Math.PI * 0,
+            Math.PI * 1.5,
+            true
+          );
+          ctx.lineTo(HORIZONTAL_INSET + BORDER_RADIUS, VERTICAL_INSET);
+          ctx.arc(
+            HORIZONTAL_INSET + BORDER_RADIUS,
+            VERTICAL_INSET + BORDER_RADIUS,
+            BORDER_RADIUS,
+            Math.PI * 1.5,
+            Math.PI * 1.0,
+            true
+          );
+          ctx.lineTo(HORIZONTAL_INSET, CANVAS_HEIGHT);
+          ctx.closePath();
+          ctx.fill();
+
           ctx.fillStyle = "#333";
           ctx.font = `${compact ? 26 : 34}px ${FONT}`;
           ctx.textAlign = "center";
@@ -111,26 +142,35 @@ export default class MessageComponent extends Container {
         },
         (checkContainer = new Container(
           [
-            labeledImageButton(
-              "assets/shared/check.png",
-              "assets/shared/check-pressed.png",
-              [],
-              () => {
-                this.hide();
-              },
+            new RoundedButtonComponent(
               {
                 x: 0,
                 y: 0,
-                width: 8 * PIXEL_ART_SIZE,
-                height: 8 * PIXEL_ART_SIZE,
+                width: 120,
+                height: 40,
+              },
+              999,
+              "transparent",
+              "#444",
+              "#bbb",
+              1,
+              () => {
+                this.hide();
+              },
+              "hide",
+              {
+                fontSize: 18,
+                textAlign: HorizontalAlignment.Center,
+                verticalAlign: VerticalAlignment.Middle,
+                color: "#fff",
               }
             ),
           ],
           {
-            x: CANVAS_WIDTH - 10 * PIXEL_ART_SIZE,
-            y: 2 * PIXEL_ART_SIZE,
-            width: 8 * PIXEL_ART_SIZE,
-            height: 8 * PIXEL_ART_SIZE,
+            x: CANVAS_WIDTH - 120 - 12,
+            y: 12,
+            width: 120,
+            height: 40,
           }
         )),
         animatedContainer,
@@ -152,6 +192,8 @@ export default class MessageComponent extends Container {
       });
       backgroundAlpha = value * 0.8;
       checkContainer.setOpacity(value);
+      animatedContainer.setDisableChildUpdates(value === 0);
+      checkContainer.setDisableChildUpdates(value === 0);
     });
     this.animationController = animationController;
   }
