@@ -10,11 +10,14 @@ import PretendCallbackAnimationController from "../../utils/PretendCallbackAnima
 import sequenceAnimations from "../../utils/sequenceAnimations";
 
 export default function introScene(onComplete: () => void) {
-  let scrimAnimation = new TimeBasedAnimationController("ease-in", 2000, 0, 1)
-    .observe((x) => {
-      thisIsText.setOpacity(1 - x);
-    })
-    .onFinish(onComplete);
+  let scrimAnimation = new TimeBasedAnimationController(
+    "ease-in",
+    2000,
+    0,
+    1
+  ).observe((x) => {
+    thisIsText.setOpacity(1 - x);
+  });
   let blackBackgroundAlpha = 1;
   let dotsAlpha = 0;
   let dotsGray = 1;
@@ -224,7 +227,11 @@ export default function introScene(onComplete: () => void) {
     new FadingTextComponent(
       "Like the slope causing the bouncing balls to bounce in different directions, unconscious and conscious judgments are made towards people because of their properties.",
       6000
-    ).onClose(onComplete),
+    ).onClose(() => {
+      setTimeout(() => {
+        onComplete();
+      }, 500);
+    }),
   ];
 
   sequenceAnimations(animations);

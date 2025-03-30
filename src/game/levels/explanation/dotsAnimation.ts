@@ -13,7 +13,7 @@ export class DotsAnimation extends Container {
   private rippleAnimation: TimeBasedAnimationController;
   private focusAnimation: TimeBasedAnimationController;
   private alphaAnimation: InterruptableAnimationController =
-    new InterruptableAnimationController("ease-in-out", 1000, 0);
+    new InterruptableAnimationController("ease-in-out", 2000, 0);
   private focusTargetX?: number;
   private focusTargetY?: number;
   private focusHue: number = 0;

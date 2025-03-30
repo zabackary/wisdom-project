@@ -18,7 +18,7 @@ export default function gameRoot() {
       {
         start: () =>
           startScreen(() => {
-            match.set("explanation");
+            match.set("intro");
           }),
         intro: () =>
           introScene(() => {

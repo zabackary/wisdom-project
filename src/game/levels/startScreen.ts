@@ -11,7 +11,7 @@ import RoundedButtonComponent from "../utils/RoundedButtonComponent";
 export default function startScreen(onStart: () => void) {
   let aboutMessage = new MessageComponent(
     "About this project",
-    "Yes, I have reused the framework of my project from last year.\nlorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "This project is written in TypeScript using HTML5 Canvas and a custom framework (reused from a project last year). It uses Rapier for physics simulations.\nThis project explores the themes of wisdom and meaninglessness in the problem of racial discrimination based on Proverbs and Ecclesiastes.",
     false
   );
   return [
@@ -121,6 +121,26 @@ export default function startScreen(onStart: () => void) {
         aboutMessage.show();
       },
       "about",
+      {
+        fontSize: 14,
+      }
+    ),
+    new RoundedButtonComponent(
+      {
+        x: CANVAS_WIDTH - 150,
+        y: CANVAS_HEIGHT - 40,
+        width: 140,
+        height: 30,
+      },
+      15, // radius
+      "#fff", // fillColor
+      "#bbb", // hoverColor
+      "#000000", // borderColor
+      1, // borderWidth
+      () => {
+        alert("Not implemented");
+      },
+      "connect audio files",
       {
         fontSize: 14,
       }

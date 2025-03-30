@@ -97,8 +97,13 @@ export default function explanationScene(onComplete: () => void) {
     new PretendPromiseAnimationController(async () => {
       await dotsAnimation.removeFocus();
     }),
-    new PretendCallbackAnimationController(() => {
+    new PretendPromiseAnimationController(async () => {
       dotsAnimation.hide();
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 1000);
+      });
     }),
     new FadingTextComponent(
       "These are only three of thousands upon thousands of recorded incidents in the United States alone. And the problem isn’t unique to the US.",
