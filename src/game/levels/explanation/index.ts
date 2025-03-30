@@ -1,9 +1,6 @@
-import * as RAPIER from "@dimforge/rapier2d";
 import Container from "../../../framework/components/Container";
-import LifecycleCallbackComponent from "../../../framework/components/LifecycleCallbackComponent";
-import ScrollingContainer from "../../../framework/components/ScrollingContainer";
 import TimeBasedAnimationController from "../../../framework/controllers/TimeBasedAnimationController";
-import { CANVAS_HEIGHT, CANVAS_WIDTH, PIXELS_PER_METER } from "../../gameRoot";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../gameRoot";
 import FadingTextComponent from "../../utils/FadingTextComponent";
 import MessageComponent from "../../utils/MessageComponent";
 import PretendCallbackAnimationController, {
@@ -14,21 +11,7 @@ import { DotsAnimation } from "./dotsAnimation";
 
 export default function explanationScene(onComplete: () => void) {
   const dotsGridSize = Math.ceil(Math.sqrt(14000));
-  let scrimAnimation = new TimeBasedAnimationController(
-    "ease-in",
-    2000,
-    0,
-    1
-  ).onFinish(onComplete);
   let blackBackgroundAlpha = 1;
-  let dotsAlpha = 0;
-  let dotsGray = 1;
-  const world = new RAPIER.World({
-    x: 0.0,
-    y: -9.81,
-  });
-
-  const worldColliders: RAPIER.Collider[] = [];
 
   const animations: (
     | TimeBasedAnimationController
@@ -110,21 +93,18 @@ export default function explanationScene(onComplete: () => void) {
       6000
     ),
     new FadingTextComponent(
-      "According to Human Rights Watch, while the US has laws prohibiting racial discrimination, Japan has no such laws.",
+      "According to Human Rights Watch, while the US has laws prohibiting racial discrimination, Japan, on the other hand, has no such laws.",
       4000
-    ),
-    new FadingTextComponent("So what next?", 2000).onClose(onComplete),
+    ).onClose(() => {
+      setTimeout(() => onComplete(), 500);
+    }),
   ];
 
   sequenceAnimations(animations);
 
-  let container: ScrollingContainer;
   let dotsAnimation: DotsAnimation;
 
   return [
-    new LifecycleCallbackComponent(() => {
-      world.step();
-    }),
     (ctx: CanvasRenderingContext2D) => {
       const oldAlpha = ctx.globalAlpha;
       ctx.globalAlpha = oldAlpha * blackBackgroundAlpha;
@@ -132,47 +112,6 @@ export default function explanationScene(onComplete: () => void) {
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       ctx.globalAlpha = oldAlpha;
     },
-    (container = new ScrollingContainer(
-      [
-        (ctx: CanvasRenderingContext2D) => {
-          ctx.globalAlpha = dotsAlpha;
-          ctx.filter = `grayscale(${dotsGray * 100}%)`;
-        },
-        (ctx: CanvasRenderingContext2D) => {
-          ctx.globalAlpha = 1.0;
-          ctx.filter = "";
-          for (const collider of worldColliders) {
-            ctx.fillStyle = "#eee";
-            const shape = collider.shape as RAPIER.Cuboid;
-            ctx.save();
-            ctx.translate(
-              collider.translation().x * PIXELS_PER_METER,
-              -collider.translation().y * PIXELS_PER_METER
-            );
-            ctx.rotate(-collider.rotation());
-            ctx.translate(
-              -collider.translation().x * PIXELS_PER_METER,
-              collider.translation().y * PIXELS_PER_METER
-            );
-            ctx.fillRect(
-              collider.translation().x * PIXELS_PER_METER -
-                shape.halfExtents.x * PIXELS_PER_METER,
-              -collider.translation().y * PIXELS_PER_METER -
-                shape.halfExtents.y * PIXELS_PER_METER,
-              shape.halfExtents.x * 2 * PIXELS_PER_METER,
-              shape.halfExtents.y * 2 * PIXELS_PER_METER
-            );
-            ctx.restore();
-          }
-        },
-      ],
-      {
-        x: 0,
-        y: 0,
-        width: CANVAS_WIDTH,
-        height: CANVAS_HEIGHT,
-      }
-    )),
     new Container(
       [
         (dotsAnimation = new DotsAnimation(
@@ -190,18 +129,10 @@ export default function explanationScene(onComplete: () => void) {
         height: CANVAS_HEIGHT,
       }
     ),
-    (ctx: CanvasRenderingContext2D) => {
-      const oldAlpha = ctx.globalAlpha;
-      ctx.globalAlpha = oldAlpha * scrimAnimation.value;
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-      ctx.globalAlpha = oldAlpha;
-    },
     ...animations.map((animation) =>
       animation instanceof TimeBasedAnimationController
         ? animation.listener()
         : animation
     ),
-    scrimAnimation.listener(),
   ];
 }

@@ -104,4 +104,9 @@ export default class Container extends Component {
     this.rotation = radians;
     return this;
   }
+
+  addChild(child: ComponentLike): this {
+    this.children.push(normalizeComponent(child));
+    return this;
+  }
 }
