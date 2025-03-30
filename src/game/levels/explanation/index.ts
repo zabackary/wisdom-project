@@ -10,7 +10,10 @@ import sequenceAnimations from "../../utils/sequenceAnimations";
 import { DotsAnimation } from "./dotsAnimation";
 
 export default function explanationScene(onComplete: () => void) {
-  const dotsGridSize = Math.ceil(Math.sqrt(14000));
+  const totalDots = 14000;
+  const aspectRatio = CANVAS_WIDTH / CANVAS_HEIGHT;
+  const dotsGridSizeY = Math.ceil(Math.sqrt(totalDots / aspectRatio));
+  const dotsGridSizeX = Math.ceil(dotsGridSizeY * aspectRatio);
   let blackBackgroundAlpha = 1;
 
   const animations: (
@@ -39,8 +42,8 @@ export default function explanationScene(onComplete: () => void) {
     ),
     new PretendPromiseAnimationController(async () => {
       await dotsAnimation.setFocus(
-        Math.floor(Math.random() * dotsGridSize),
-        Math.floor(Math.random() * dotsGridSize)
+        Math.floor(Math.random() * dotsGridSizeX),
+        Math.floor(Math.random() * dotsGridSizeY)
       );
     }),
     new FadingTextComponent(
@@ -54,8 +57,8 @@ export default function explanationScene(onComplete: () => void) {
     new PretendPromiseAnimationController(async () => {
       await dotsAnimation.removeFocus();
       await dotsAnimation.setFocus(
-        Math.floor(Math.random() * dotsGridSize),
-        Math.floor(Math.random() * dotsGridSize)
+        Math.floor(Math.random() * dotsGridSizeX),
+        Math.floor(Math.random() * dotsGridSizeY)
       );
     }),
     new FadingTextComponent(
@@ -69,8 +72,8 @@ export default function explanationScene(onComplete: () => void) {
     new PretendPromiseAnimationController(async () => {
       await dotsAnimation.removeFocus();
       await dotsAnimation.setFocus(
-        Math.floor(Math.random() * dotsGridSize),
-        Math.floor(Math.random() * dotsGridSize)
+        Math.floor(Math.random() * dotsGridSizeX),
+        Math.floor(Math.random() * dotsGridSizeY)
       );
     }),
     new FadingTextComponent(
@@ -118,8 +121,8 @@ export default function explanationScene(onComplete: () => void) {
           80,
           20,
           "#999",
-          dotsGridSize,
-          dotsGridSize
+          dotsGridSizeY,
+          dotsGridSizeX
         )),
       ],
       {

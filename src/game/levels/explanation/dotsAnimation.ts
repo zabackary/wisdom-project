@@ -4,6 +4,8 @@ import InterruptableAnimationController from "../../../framework/controllers/Int
 import TimeBasedAnimationController from "../../../framework/controllers/TimeBasedAnimationController";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../gameRoot";
 
+const REVEAL_DOT_CONSTANT = 10;
+
 /**
  * A component that contains a grid of circles (dots) that zoom out into a large grid.
  * It is optimized for performance to draw hundreds of thousands of dots.
@@ -107,7 +109,8 @@ export class DotsAnimation extends Container {
     );
     this.focusAnimation.observeWhileRunning((x) => {
       if (this.focusTargetX !== undefined && this.focusTargetY !== undefined) {
-        const finalScale = CANVAS_WIDTH / (dotSize + dotSpacing) / 5;
+        const finalScale =
+          CANVAS_WIDTH / (dotSize + dotSpacing) / REVEAL_DOT_CONSTANT;
         const zoom = targetScale + (finalScale - targetScale) * x;
 
         // Calculate the scroll offsets to center the dot

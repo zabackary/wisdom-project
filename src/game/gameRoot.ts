@@ -6,8 +6,8 @@ import StateRecreationMatch from "./utils/StateRecreationMatch";
 
 export const PIXEL_ART_SIZE = 6;
 export const PIXELS_PER_METER = 32 * 6;
-export const CANVAS_WIDTH = 960;
-export const CANVAS_HEIGHT = 720;
+export const CANVAS_WIDTH = BUILD_WIDTH;
+export const CANVAS_HEIGHT = BUILD_HEIGHT;
 export const FONT = '"Titillium Web"';
 export const PROSE_FONT = '"Newsreader"';
 export const RACE_ONE_COLOR = "#FF0000";

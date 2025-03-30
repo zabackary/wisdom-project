@@ -28,8 +28,8 @@ export default function introScene(onComplete: () => void) {
 
   // Create a dynamic rigid-body.
   let redDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(
-    CANVAS_WIDTH / 2 / PIXELS_PER_METER - 0.001,
-    CANVAS_HEIGHT / 2 / -PIXELS_PER_METER - 0.6
+    960 / 2 / PIXELS_PER_METER - 0.001,
+    720 / 2 / -PIXELS_PER_METER - 0.6
   );
   let redBody = world.createRigidBody(redDesc);
 
@@ -42,8 +42,8 @@ export default function introScene(onComplete: () => void) {
 
   // create a blue dynamic rigid-body
   let blueDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(
-    CANVAS_WIDTH / 2 / PIXELS_PER_METER + 0.001,
-    CANVAS_HEIGHT / 2 / -PIXELS_PER_METER + 0.6
+    960 / 2 / PIXELS_PER_METER + 0.001,
+    720 / 2 / -PIXELS_PER_METER + 0.6
   );
   let blueBody = world.createRigidBody(blueDesc);
 
@@ -64,77 +64,71 @@ export default function introScene(onComplete: () => void) {
     world.createCollider(
       RAPIER.ColliderDesc.cuboid(
         0.1,
-        CANVAS_HEIGHT / PIXELS_PER_METER + 0.1
-      ).setTranslation(CANVAS_WIDTH / PIXELS_PER_METER + 0.1, 0)
+        720 / PIXELS_PER_METER + 0.1
+      ).setTranslation(960 / PIXELS_PER_METER + 0.1, 0)
     ),
     world.createCollider(
       RAPIER.ColliderDesc.cuboid(
-        CANVAS_WIDTH / PIXELS_PER_METER / 2,
+        960 / PIXELS_PER_METER / 2,
         0.1
       ).setTranslation(
-        CANVAS_WIDTH / PIXELS_PER_METER / 2,
-        -CANVAS_HEIGHT / PIXELS_PER_METER - 0.1
+        960 / PIXELS_PER_METER / 2,
+        -720 / PIXELS_PER_METER - 0.1
       )
     ),
     world.createCollider(
-      RAPIER.ColliderDesc.cuboid(CANVAS_WIDTH / PIXELS_PER_METER / 4, 0.1)
+      RAPIER.ColliderDesc.cuboid(960 / PIXELS_PER_METER / 4, 0.1)
         .setTranslation(
-          -CANVAS_WIDTH / PIXELS_PER_METER / 8,
-          (-CANVAS_HEIGHT / PIXELS_PER_METER) * 1.9
+          -960 / PIXELS_PER_METER / 8,
+          (-720 / PIXELS_PER_METER) * 1.9
         )
         .setRotation(Math.PI / 8)
     ),
     // a box slightly below that made of three walls
     (leftFloor = world.createCollider(
       RAPIER.ColliderDesc.cuboid(
-        (CANVAS_WIDTH / PIXELS_PER_METER) * 0.2,
+        (960 / PIXELS_PER_METER) * 0.2,
         0.1
       ).setTranslation(
-        -CANVAS_WIDTH / PIXELS_PER_METER -
-          (CANVAS_WIDTH / PIXELS_PER_METER) * 0.2,
-        (-CANVAS_HEIGHT / PIXELS_PER_METER) * 3.0
+        -960 / PIXELS_PER_METER - (960 / PIXELS_PER_METER) * 0.2,
+        (-720 / PIXELS_PER_METER) * 3.0
       )
     )),
     world.createCollider(
       RAPIER.ColliderDesc.cuboid(
-        (CANVAS_WIDTH / PIXELS_PER_METER) * 0.2,
+        (960 / PIXELS_PER_METER) * 0.2,
         0.1
       ).setTranslation(
-        -CANVAS_WIDTH / PIXELS_PER_METER +
-          (CANVAS_WIDTH / PIXELS_PER_METER) * 0.2,
-        (-CANVAS_HEIGHT / PIXELS_PER_METER) * 3.0
+        -960 / PIXELS_PER_METER + (960 / PIXELS_PER_METER) * 0.2,
+        (-720 / PIXELS_PER_METER) * 3.0
       )
     ),
     world.createCollider(
       RAPIER.ColliderDesc.cuboid(
         0.1,
-        (CANVAS_HEIGHT / PIXELS_PER_METER) * 0.2
+        (720 / PIXELS_PER_METER) * 0.2
+      ).setTranslation(-960 / PIXELS_PER_METER, (-720 / PIXELS_PER_METER) * 2.8)
+    ),
+    world.createCollider(
+      RAPIER.ColliderDesc.cuboid(
+        0.1,
+        (720 / PIXELS_PER_METER) * 0.2
       ).setTranslation(
-        -CANVAS_WIDTH / PIXELS_PER_METER,
-        (-CANVAS_HEIGHT / PIXELS_PER_METER) * 2.8
+        -960 / PIXELS_PER_METER - (960 / PIXELS_PER_METER) * 0.4,
+        (-720 / PIXELS_PER_METER) * 2.8
       )
     ),
     world.createCollider(
       RAPIER.ColliderDesc.cuboid(
         0.1,
-        (CANVAS_HEIGHT / PIXELS_PER_METER) * 0.2
+        (720 / PIXELS_PER_METER) * 0.2
       ).setTranslation(
-        -CANVAS_WIDTH / PIXELS_PER_METER -
-          (CANVAS_WIDTH / PIXELS_PER_METER) * 0.4,
-        (-CANVAS_HEIGHT / PIXELS_PER_METER) * 2.8
-      )
-    ),
-    world.createCollider(
-      RAPIER.ColliderDesc.cuboid(
-        0.1,
-        (CANVAS_HEIGHT / PIXELS_PER_METER) * 0.2
-      ).setTranslation(
-        -CANVAS_WIDTH / PIXELS_PER_METER +
-          (CANVAS_WIDTH / PIXELS_PER_METER) * 0.4,
-        (-CANVAS_HEIGHT / PIXELS_PER_METER) * 2.8
+        -960 / PIXELS_PER_METER + (960 / PIXELS_PER_METER) * 0.4,
+        (-720 / PIXELS_PER_METER) * 2.8
       )
     ),
   ];
+  let colliderAlphas = 0.0;
 
   let thisIsText: FadingTextComponent;
   const growTextAnimation = new TimeBasedAnimationController(
@@ -191,6 +185,7 @@ export default function introScene(onComplete: () => void) {
       0,
       1
     ).observeWhileRunning((x) => {
+      colliderAlphas = x;
       container.setZoom(1 - x * 0.7);
       container.setScroll(-x * CANVAS_WIDTH * 2, 0);
     }),
@@ -278,7 +273,7 @@ export default function introScene(onComplete: () => void) {
           height: PIXELS_PER_METER * 1,
         })),
         (ctx: CanvasRenderingContext2D) => {
-          ctx.globalAlpha = 1.0;
+          ctx.globalAlpha = colliderAlphas;
           ctx.filter = "";
           for (const collider of worldColliders) {
             ctx.fillStyle = "#eee";
@@ -303,6 +298,7 @@ export default function introScene(onComplete: () => void) {
             );
             ctx.restore();
           }
+          ctx.globalAlpha = 1.0;
         },
       ],
       {
