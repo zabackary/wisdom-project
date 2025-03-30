@@ -8,4 +8,7 @@ export default defineConfig({
     BUILD_WIDTH: 1280,
     BUILD_HEIGHT: 720,
   },
+  build: {
+    target: "es2022",
+  },
 });
