@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Christian Story</title>
+    <title>Wisdom Project</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,6 +22,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        overflow: hidden;
       }
       .container {
         position: fixed;
@@ -63,12 +64,44 @@
         transition: width 0.2s;
         border-radius: 999px;
       }
+      @keyframes loading-tip-reveal {
+        0% {
+          opacity: 0;
+        }
+        80% {
+          opacity: 0;
+          transform: translate(-50%, 50px);
+        }
+        100% {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+      }
+      #loading-tip {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #000;
+        font-family: "Titillium Web", serif;
+        font-size: 12px;
+        text-align: center;
+        background-color: #d1b3b3;
+        padding: 4px 8px;
+        border-radius: 999px;
+        animation: loading-tip-reveal 5s ease-in-out forwards;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="loading-container">
         <div id="loading-progress" style="--progress: 0">loading</div>
+        <div id="loading-tip">
+          If the animation doesn't load, please ensure that the browser you are
+          using supports the ECMAScript 2022 standard. Specifically, your
+          browser should support top-level await.
+        </div>
       </div>
       <canvas></canvas>
     </div>
