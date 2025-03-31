@@ -5,7 +5,7 @@ export default class InterruptableAnimationController extends Controller<number>
   private startTime: number = 0;
   private startValue: number;
   private targetValue: number;
-  private value: number;
+  public value: number;
 
   constructor(
     private curve: keyof typeof EASING_CURVES,

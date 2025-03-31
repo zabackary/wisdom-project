@@ -6,6 +6,7 @@ import { wrapCanvasLines } from "./MessageComponent";
 
 export default class FadingTextComponent extends Container {
   private animationController: InterruptableAnimationController;
+  private verseReference?: string;
 
   public isShowing: boolean = false;
 
@@ -54,6 +55,18 @@ export default class FadingTextComponent extends Container {
           ctx.globalAlpha = oldAlpha * this.backgroundAlpha * alphaAnimation;
           ctx.fillStyle = this.backgroundColor;
           ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+          ctx.globalAlpha = alphaAnimation;
+          if (this.verseReference) {
+            ctx.fillStyle = this.textColor;
+            ctx.font = `16px ${FONT}`;
+            ctx.textAlign = "right";
+            ctx.textBaseline = "bottom";
+            ctx.fillText(
+              this.verseReference,
+              CANVAS_WIDTH - 20,
+              CANVAS_HEIGHT - 20
+            );
+          }
           ctx.globalAlpha = oldAlpha;
         },
         animatedContainer,
@@ -116,6 +129,11 @@ export default class FadingTextComponent extends Container {
   private closeObservers: (() => void)[] = [];
   onClose(callback: () => void): this {
     this.closeObservers.push(callback);
+    return this;
+  }
+
+  withVerseReference(verseReference: string): this {
+    this.verseReference = verseReference;
     return this;
   }
 }

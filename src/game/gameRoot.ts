@@ -1,5 +1,6 @@
 import explanationScene from "./levels/explanation";
 import hevelScene from "./levels/hevel";
+import hokmaScene from "./levels/hokma";
 import introScene from "./levels/intro";
 import startScreen from "./levels/startScreen";
 import StateRecreationMatch from "./utils/StateRecreationMatch";
@@ -33,6 +34,10 @@ export default function gameRoot() {
           }),
         hevel: () =>
           hevelScene(() => {
+            match.set("hokma");
+          }),
+        hokma: () =>
+          hokmaScene(() => {
             match.set("start");
           }),
       },

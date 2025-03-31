@@ -7,7 +7,7 @@ import PretendCallbackAnimationController, {
   PretendPromiseAnimationController,
 } from "../../utils/PretendCallbackAnimationController";
 import sequenceAnimations from "../../utils/sequenceAnimations";
-import { DotsAnimation } from "./dotsAnimation";
+import { DotsAnimation } from "./DotsAnimation";
 
 export default function explanationScene(onComplete: () => void) {
   const totalDots = 14000;

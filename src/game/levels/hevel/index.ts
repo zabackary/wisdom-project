@@ -44,35 +44,42 @@ export default function hevelScene(onComplete: () => void) {
       });
     }),
     new FadingTextComponent(
-      "Ecclesiastes 5:15 (ESV) tells us that “Everyone comes naked from their mother’s womb, and as everyone comes, so they depart.”",
+      "We’re told that “Everyone comes naked from their mother’s womb, and as everyone comes, so they depart.”",
       5000,
       undefined,
       undefined,
       "transparent"
-    ),
+    ).withVerseReference("Ecclesiastes 5:15"),
     new FadingTextComponent(
       "Wanting to be better than another race, or wanting to be superior – in the end, death will equalize everyone.",
       5000,
       undefined,
       undefined,
       "transparent"
-    ),
+    ).withVerseReference("Ecclesiastes 3:18-21"),
     new FadingTextComponent(
       "Everyone, of every race, will eventually die. Everyone has a common destiny.",
       4000,
       undefined,
       undefined,
       "transparent"
-    ),
+    ).withVerseReference("Ecclesiastes 9:2"),
+    new PretendPromiseAnimationController(async () => {
+      setTimeout(() => powerAnimation.dropBalls(), 5000);
+    }),
     new FadingTextComponent(
-      "Toiling in order to prove one’s racial superiority is meaningless, as whatever status gained is transient and will fade away.",
-      4000,
+      "Envious toiling in order to prove one’s racial superiority – desire to prove one’s superiority – is meaningless, as whatever status gained is transient and will fade away.",
+      8000,
       undefined,
       undefined,
       "transparent"
-    ),
+    ).withVerseReference("(Ecclesiastes 4:4 + Constable's Notes)"),
     new PretendPromiseAnimationController(async () => {
-      await powerAnimation.dropBalls();
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 2000);
+      });
     }),
     new FadingTextComponent(
       "Discriminating against others to further one’s own interests and power will be erased by time —",
@@ -98,6 +105,13 @@ export default function hevelScene(onComplete: () => void) {
         }, 5000);
       });
     }),
+    new FadingTextComponent(
+      "It’s hevel.",
+      1000,
+      undefined,
+      undefined,
+      "transparent"
+    ),
     new FadingTextComponent(
       "But if wanting status is meaningless, what should we do that isn’t?",
       4000,

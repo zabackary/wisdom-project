@@ -30,10 +30,12 @@ export default class Game {
 
   private rootComponent: Component;
 
+  private scaleFactor: number = window.devicePixelRatio;
+
   constructor(private canvas: HTMLCanvasElement, rootComponent: ComponentLike) {
     this.rootComponent = normalizeComponent(rootComponent);
-    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    canvas.width = canvas.offsetWidth * this.scaleFactor;
+    canvas.height = canvas.offsetHeight * this.scaleFactor;
     this.context = canvas.getContext("2d")!;
   }
 
@@ -63,9 +65,14 @@ export default class Game {
 
   async gameLoop() {
     this.context.reset();
-    this.context.scale(window.devicePixelRatio, window.devicePixelRatio);
+    this.context.scale(this.scaleFactor, this.scaleFactor);
     this.context.fillStyle = "#fff";
-    this.context.fillRect(0, 0, 99999, 99999);
+    this.context.fillRect(
+      0,
+      0,
+      this.canvas.width / this.scaleFactor,
+      this.canvas.height / this.scaleFactor
+    );
     this.context.imageSmoothingEnabled = false;
     this.canvas.style.cursor = "initial";
     const updateInfo: UpdateInfo = {
