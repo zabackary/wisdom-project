@@ -17,11 +17,13 @@ export const RACE_TWO_COLOR = "#6666FF";
 export default function gameRoot() {
   const level = "start";
   let match: StateRecreationMatch;
+  let hasStarted = false;
   return [
     (match = new StateRecreationMatch(
       {
         start: () =>
-          startScreen(() => {
+          startScreen(!hasStarted, () => {
+            hasStarted = true;
             match.set("intro");
           }),
         intro: () =>

@@ -41,14 +41,15 @@ export class DotsAnimation extends Container {
                   const x = col * (dotSize + dotSpacing) + dotSize / 2;
                   const y = row * (dotSize + dotSpacing) + dotSize / 2;
 
+                  const currentRadius = Math.sqrt(numRows*numRows+numCols*numCols);
                   ctx.globalAlpha =
                     oldAlpha *
                     Math.min(
                       Math.max(
                         this.rippleAnimation.value -
                           Math.sqrt(
-                            (row * row + col * col) / (numRows * numCols)
-                          ),
+                            (row * row + col * col)
+                          ) / currentRadius,
                         0
                       ),
                       1

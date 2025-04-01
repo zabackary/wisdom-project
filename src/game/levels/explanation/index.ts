@@ -34,13 +34,18 @@ export default function explanationScene(onComplete: () => void) {
       dotsAnimation.show();
       setTimeout(() => {
         dotsAnimation.start();
-      }, 500);
+      }, 1500);
     }),
     new FadingTextComponent(
       "In one year alone, the FBI recorded 14,000 victims of hate speech motivated by biases.",
       4000
-    ),
+    ).withVerseReference("U.S. Dept. of Justice | Hate Crime Statistics"),
     new PretendPromiseAnimationController(async () => {
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 1000);
+      });
       await dotsAnimation.setFocus(
         Math.floor(Math.random() * dotsGridSizeX),
         Math.floor(Math.random() * dotsGridSizeY)
@@ -49,7 +54,7 @@ export default function explanationScene(onComplete: () => void) {
     new FadingTextComponent(
       "In Texas in 2020, a man attacked a family he believed was Chinese in a large store. He cut the father in the face and attacked his 2 and 6 year old children by slashing their face, yelling, “Get out of America!”",
       4000
-    ),
+    ).withVerseReference("U.S. Dept. of Justice | Hate Crime State Data"),
     new FadingTextComponent(
       "He believed they were “from the country who started spreading that disease [coronavirus] around.”",
       4000
@@ -64,7 +69,7 @@ export default function explanationScene(onComplete: () => void) {
     new FadingTextComponent(
       "In Massachusetts, a man set fire to a church serving a mostly African American congregation.",
       4000
-    ),
+    ).withVerseReference("U.S. Dept. of Justice | Hate Crime State Data"),
     new FadingTextComponent(
       "He was told on his phone to “eliminate all [black people].”",
       4000
@@ -79,7 +84,7 @@ export default function explanationScene(onComplete: () => void) {
     new FadingTextComponent(
       "In another case in Florida, a man was driving with his family when another man sideswiped his car while shouting racial slurs, telling police officers later that Black people needed to be kept “in their areas.”",
       4000
-    ),
+    ).withVerseReference("U.S. Dept. of Justice | Hate Crime State Data"),
     new PretendPromiseAnimationController(async () => {
       await dotsAnimation.removeFocus();
     }),
@@ -96,9 +101,9 @@ export default function explanationScene(onComplete: () => void) {
       6000
     ),
     new FadingTextComponent(
-      "According to Human Rights Watch, while the US has laws prohibiting racial discrimination, Japan, on the other hand, has no such laws.",
+      "While the US has laws prohibiting racial discrimination, Japan, on the other hand, has no such laws.",
       4000
-    ).onClose(() => {
+    ).withVerseReference("Human Rights Watch").onClose(() => {
       setTimeout(() => onComplete(), 500);
     }),
   ];

@@ -14,6 +14,8 @@ import {
 } from "../gameRoot";
 import RoundedButtonComponent from "./RoundedButtonComponent";
 
+const MESSAGE_WIDTH = 520;
+
 /**
  * Wraps lines on a canvas, TS version of https://stackoverflow.com/a/16599668
  *
@@ -62,7 +64,7 @@ export default class MessageComponent extends Container {
         (ctx) => {
           // rounded rectangle background (only top two corners, 40px radius)
           const BORDER_RADIUS = 40;
-          const HORIZONTAL_INSET = 220;
+          const HORIZONTAL_INSET = CANVAS_WIDTH / 2 - MESSAGE_WIDTH / 2;
           const VERTICAL_INSET = 120;
 
           ctx.fillStyle = "#eee";

@@ -1,23 +1,30 @@
 import TextComponent, {
   HorizontalAlignment,
-} from "../../framework/components/TextComponent";
-import TimeBasedAnimationController from "../../framework/controllers/TimeBasedAnimationController";
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../gameRoot";
-import MessageComponent from "../utils/MessageComponent";
-import RoundedButtonComponent from "../utils/RoundedButtonComponent";
+} from "../../../framework/components/TextComponent";
+import TimeBasedAnimationController from "../../../framework/controllers/TimeBasedAnimationController";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../gameRoot";
+import MessageComponent from "../../utils/MessageComponent";
+import RoundedButtonComponent from "../../utils/RoundedButtonComponent";
+import citations from "./citations.txt?raw";
+import projectExplanation from "./projectExplanation.txt?raw";
 
 // filepath: /home/zabackary/projects/wisdom-project/src/game/levels/startScreen.ts
 
-export default function startScreen(onStart: () => void) {
+export default function startScreen(isFirstTime: boolean, onStart: () => void) {
   let aboutMessage = new MessageComponent(
     "About this project",
-    "This project is written in TypeScript using HTML5 Canvas and a custom framework (reused from a project last year). It uses Rapier for physics simulations.\nThis project explores the themes of wisdom and meaninglessness in the problem of racial discrimination based on Proverbs and Ecclesiastes.",
+    projectExplanation,
     false
+  );
+  let citationsMessage = new MessageComponent(
+    "Citations",
+    citations,
+    true
   );
   return [
     // Fade-in effect for the title
     new TextComponent(
-      "hokma and hevel in racial discrimination",
+      isFirstTime ? "hokma and hevel in racial discrimination" : "thank you for watching",
       {
         fontSize: 40,
         textAlign: HorizontalAlignment.Center,
@@ -59,10 +66,10 @@ export default function startScreen(onStart: () => void) {
       () => {
         onStart();
       },
-      "Start"
+      isFirstTime ? "Watch" : "Rewatch"
     ),
     new TextComponent(
-      "created by zachary c · q3 2025 · caj wisdom 10/11",
+      isFirstTime ? "created by zachary c · q3 2025 · caj wisdom 10/11" : "citations and about can be found in the bottom left",
       {
         fontSize: 18,
         textAlign: HorizontalAlignment.Center,
@@ -127,6 +134,26 @@ export default function startScreen(onStart: () => void) {
     ),
     new RoundedButtonComponent(
       {
+        x: 240,
+        y: CANVAS_HEIGHT - 40,
+        width: 80,
+        height: 30,
+      },
+      15, // radius
+      "#fff", // fillColor
+      "#bbb", // hoverColor
+      "#000000", // borderColor
+      1, // borderWidth
+      () => {
+        citationsMessage.show();
+      },
+      "citations",
+      {
+        fontSize: 14,
+      }
+    ),
+    new RoundedButtonComponent(
+      {
         x: CANVAS_WIDTH - 150,
         y: CANVAS_HEIGHT - 40,
         width: 140,
@@ -146,5 +173,6 @@ export default function startScreen(onStart: () => void) {
       }
     ),
     aboutMessage,
+    citationsMessage,
   ];
 }

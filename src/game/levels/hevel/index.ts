@@ -25,7 +25,7 @@ export default function hevelScene(onComplete: () => void) {
     new PretendCallbackAnimationController(() => {
       powerAnimation.initializeCircles();
     }, true),
-    new FadingTextComponent("But why do we do this?", 3000),
+    new FadingTextComponent("So why we do this?", 3000),
     new FadingTextComponent("“Eliminate them. Keep them in their areas”", 4000),
     new PretendPromiseAnimationController(async () => {
       await powerAnimation.animateTheBall();

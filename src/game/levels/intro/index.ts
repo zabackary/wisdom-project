@@ -140,6 +140,8 @@ export default function introScene(onComplete: () => void) {
     thisIsText.fontSize = x;
   });
 
+  const oldScroll = -(CANVAS_WIDTH - 960) / 2;
+
   const animations: (
     | TimeBasedAnimationController
     | MessageComponent
@@ -187,7 +189,8 @@ export default function introScene(onComplete: () => void) {
     ).observeWhileRunning((x) => {
       colliderAlphas = x;
       container.setZoom(1 - x * 0.7);
-      container.setScroll(-x * CANVAS_WIDTH * 2, 0);
+      const targetScroll = -2 * CANVAS_WIDTH;
+      container.setScroll(oldScroll + (targetScroll - oldScroll) * x, 0);
     }),
     new FadingTextComponent(
       "And as we go about daily life, people and places express bias because of those differences.",
@@ -307,7 +310,7 @@ export default function introScene(onComplete: () => void) {
         width: CANVAS_WIDTH,
         height: CANVAS_HEIGHT,
       }
-    )),
+    ).setScroll(oldScroll, 0)),
     (ctx: CanvasRenderingContext2D) => {
       const oldAlpha = ctx.globalAlpha;
       ctx.globalAlpha = oldAlpha * scrimAnimation.value;
