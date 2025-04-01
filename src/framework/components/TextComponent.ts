@@ -29,16 +29,17 @@ export interface TextSettings {
  * @param ctx canvas rendering context
  * @param text the text to wrap
  * @param maxWidth width at which to wrap at
- * @returns the text separated by lines
+ * @returns the text separated by lines and the total height of the lines
  */
 function wrapCanvasLines(
   ctx: CanvasRenderingContext2D,
   text: string,
   maxWidth: number
-): string[] {
+): { lines: string[]; totalHeight: number } {
   const words = text.split(" ");
   const lines = [];
   let currentLine = words[0];
+  let totalHeight = 0;
 
   for (let i = 1; i < words.length; i++) {
     const word = words[i];
@@ -47,11 +48,20 @@ function wrapCanvasLines(
       currentLine += " " + word;
     } else {
       lines.push(currentLine);
+      totalHeight +=
+        ctx.measureText(currentLine).actualBoundingBoxAscent +
+        ctx.measureText(currentLine).actualBoundingBoxDescent;
       currentLine = word;
     }
   }
   lines.push(currentLine);
-  return lines;
+  totalHeight +=
+    ctx.measureText(currentLine).actualBoundingBoxAscent +
+    ctx.measureText(currentLine).actualBoundingBoxDescent;
+  return {
+    lines,
+    totalHeight,
+  };
 }
 
 export default class TextComponent extends Container {
@@ -82,7 +92,7 @@ export default class TextComponent extends Container {
           context.textAlign = this.settings.textAlign;
           context.textBaseline = this.settings.verticalAlign;
           if (this.settings.wrap) {
-            const lines = wrapCanvasLines(
+            const { lines, totalHeight } = wrapCanvasLines(
               context,
               this.text,
               this.bounds.width
@@ -91,7 +101,7 @@ export default class TextComponent extends Container {
               context.fillText(
                 line,
                 x,
-                y + (index - lines.length / 2) * this.settings.fontSize
+                y - totalHeight / 2 + index * (totalHeight / (lines.length - 1))
               );
             });
           } else {
