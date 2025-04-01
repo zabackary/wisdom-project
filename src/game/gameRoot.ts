@@ -1,3 +1,4 @@
+import applicationScene from "./levels/application";
 import explanationScene from "./levels/explanation";
 import hevelScene from "./levels/hevel";
 import hokmaScene from "./levels/hokma";
@@ -40,6 +41,10 @@ export default function gameRoot() {
           }),
         hokma: () =>
           hokmaScene(() => {
+            match.set("application");
+          }),
+        application: () =>
+          applicationScene(() => {
             match.set("start");
           }),
       },
