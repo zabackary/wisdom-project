@@ -147,6 +147,7 @@ export default function introScene(onComplete: () => void) {
     | MessageComponent
     | FadingTextComponent
   )[] = [
+    new PretendCallbackAnimationController(() => {}, true),
     new FadingTextComponent("First, we start with black.", 4000).withAudio(
       "2025-04-02 21-28-22.mp3"
     ),
