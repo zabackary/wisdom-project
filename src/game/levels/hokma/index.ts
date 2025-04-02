@@ -56,24 +56,26 @@ export default function hokmaScene(onComplete: () => void) {
     }, true),
     new FadingTextComponent(
       "That’s where wisdom, or hokma, comes in.",
-      4000,
+      5000,
       undefined,
       "#000",
       "#fff"
-    ),
+    ).withAudio("2025-04-02 21-57-02.mp3"),
     new PretendCallbackAnimationController(() => {
       setTimeout(() => {
         dotMorpher.morphPlatform();
-      }, 2000);
+      }, 7000);
     }),
     new FadingTextComponent(
       "Instead of being an influence who stirs up conflict in their community in order to gain status over people unlike us, we can support others.",
-      8000,
+      10000,
       undefined,
       "#000",
       "#fff",
       0
-    ).withVerseReference("Proverbs 6:19 + Constable’s Notes"),
+    )
+      .withVerseReference("Proverbs 6:19 + Constable’s Notes")
+      .withAudio("2025-04-02 21-57-11.mp3"),
     new PretendPromiseAnimationController(async () => {
       supportedDots.dropCircles(CANVAS_HEIGHT / 2 + 200 - 50, 30, 200);
       await new Promise<void>((resolve) => {
@@ -84,14 +86,14 @@ export default function hokmaScene(onComplete: () => void) {
     }),
     new FadingTextComponent(
       "Instead of holding hate against those who are different, we can use love –",
-      4000,
+      5000,
       undefined,
       "#000",
       "#fff"
-    ),
+    ).withAudio("2025-04-02 21-58-37.mp3"),
     new FadingTextComponent(
-      "we can love not only those who look different than us, but also take steps to reduce the gaps we’ve caused in the past.",
-      4000,
+      "we can love those who look different than us, and take steps to reduce the gaps we’ve caused in the past.",
+      7000,
       undefined,
       "#000",
       "#fff"
@@ -118,11 +120,13 @@ export default function hokmaScene(onComplete: () => void) {
     }),
     new FadingTextComponent(
       "Showing wisdom means being kind to those we’ve disadvantaged – because even if it’s meaningless in this world, “[the Lord] will reward [us] for what [we] have done.”",
-      4000,
+      12000,
       undefined,
       "#000",
       "#fff"
-    ).withVerseReference("Proverbs 19:17"),
+    )
+      .withVerseReference("Proverbs 19:17")
+      .withAudio("2025-04-02 21-58-55.mp3"),
     new PretendPromiseAnimationController(async () => {
       await new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -135,11 +139,13 @@ export default function hokmaScene(onComplete: () => void) {
     }),
     new FadingTextComponent(
       "To be wise, we’re not called to judge with partiality, discriminating, but to judge truthfully.",
-      4000,
+      8000,
       undefined,
       "#000",
       "#fff"
-    ).withVerseReference("Proverbs 24:23"),
+    )
+      .withVerseReference("Proverbs 24:23")
+      .withAudio("2025-04-02 21-59-13.mp3"),
     new TimeBasedAnimationController(
       "ease-in-out",
       2000,

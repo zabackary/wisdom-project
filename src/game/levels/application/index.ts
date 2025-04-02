@@ -4,6 +4,7 @@ import TextComponent, {
 } from "../../../framework/components/TextComponent";
 import TimeBasedAnimationController from "../../../framework/controllers/TimeBasedAnimationController";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../gameRoot";
+import { playAudio } from "../../utils/audio";
 import FadingTextComponent from "../../utils/FadingTextComponent";
 import PretendCallbackAnimationController, {
   PretendPromiseAnimationController,
@@ -25,35 +26,44 @@ export default function applicationScene(onComplete: () => void) {
     0,
     1
   );
-  const boxes = [
+  const boxes: [ContentBox, string][] = [
     // three boxes at the top in a row
-    new ContentBox(
-      "I should judge truthfully based on a person’s actions instead of their skin color.",
-      {
-        x: (CANVAS_WIDTH / 3) * 0 + 20,
-        y: 20,
-        width: CANVAS_WIDTH / 3 - 40,
-        height: CANVAS_HEIGHT / 2 - 40,
-      }
-    ),
-    new ContentBox(
-      "I should be kind and show love to people no matter what I assume about them.",
-      {
-        x: (CANVAS_WIDTH / 3) * 1 + 20,
-        y: 20,
-        width: CANVAS_WIDTH / 3 - 40,
-        height: CANVAS_HEIGHT / 2 - 40,
-      }
-    ),
-    new ContentBox(
-      "I should take time to reflect upon my biases instead of letting them unconsciously control me.",
-      {
-        x: (CANVAS_WIDTH / 3) * 2 + 20,
-        y: 20,
-        width: CANVAS_WIDTH / 3 - 40,
-        height: CANVAS_HEIGHT / 2 - 40,
-      }
-    ),
+    [
+      new ContentBox(
+        "I should judge truthfully based on a person’s actions instead of their skin color.",
+        {
+          x: (CANVAS_WIDTH / 3) * 0 + 20,
+          y: 20,
+          width: CANVAS_WIDTH / 3 - 40,
+          height: CANVAS_HEIGHT / 2 - 40,
+        }
+      ),
+      "2025-04-02 22-00-16.mp3",
+    ],
+    [
+      new ContentBox(
+        "I should be kind and show love to people no matter what I assume about them.",
+        {
+          x: (CANVAS_WIDTH / 3) * 1 + 20,
+          y: 20,
+          width: CANVAS_WIDTH / 3 - 40,
+          height: CANVAS_HEIGHT / 2 - 40,
+        }
+      ),
+      "2025-04-02 22-00-24.mp3",
+    ],
+    [
+      new ContentBox(
+        "I should take time to reflect upon my biases instead of letting them unconsciously control me.",
+        {
+          x: (CANVAS_WIDTH / 3) * 2 + 20,
+          y: 20,
+          width: CANVAS_WIDTH / 3 - 40,
+          height: CANVAS_HEIGHT / 2 - 40,
+        }
+      ),
+      "2025-04-02 22-00-34.mp3",
+    ],
   ];
   const conclusionText = new TextComponent(
     "And that is racial discrimination in the context of Wisdom.",
@@ -79,7 +89,7 @@ export default function applicationScene(onComplete: () => void) {
       undefined,
       "#000",
       "transparent"
-    ),
+    ).withAudio("2025-04-02 21-59-39.mp3"),
     // Stick figure comes in from the left
     new TimeBasedAnimationController(
       "ease-out",
@@ -125,26 +135,27 @@ export default function applicationScene(onComplete: () => void) {
     ),
     new FadingTextComponent(
       "Well, personally, even though I am sometimes discriminated against in the US, I am also a discriminator in Japan where there is so little ethnic diversity. That is why it is important to me.",
-      6000,
+      13000,
       undefined,
       "#000",
       "transparent"
-    ),
+    ).withAudio("2025-04-02 21-59-54.mp3"),
     new PretendPromiseAnimationController(async () => {
-      for (const box of boxes) {
+      for (const [box, audioName] of boxes) {
         await new Promise<void>((resolve) => {
           setTimeout(() => {
             resolve();
-          }, 4000);
+          }, 7000);
         });
         box.enter();
+        playAudio(audioName);
       }
       await new Promise<void>((resolve) => {
         setTimeout(() => {
           resolve();
-        }, 2000);
+        }, 10000);
       });
-      for (const box of boxes) {
+      for (const [box] of boxes) {
         await new Promise<void>((resolve) => {
           setTimeout(() => {
             resolve();
@@ -154,6 +165,9 @@ export default function applicationScene(onComplete: () => void) {
       }
     }),
     new TimeBasedAnimationController("ease-in-out", 2000, 0, 1)
+      .onStart(() => {
+        playAudio("2025-04-02 22-00-53.mp3");
+      })
       .observeWhileRunning((x) => {
         conclusionText.setOpacity(x);
       })
@@ -179,7 +193,7 @@ export default function applicationScene(onComplete: () => void) {
         ? animation.listener()
         : animation
     ),
-    ...boxes,
+    ...boxes.map(([box]) => box),
     scrimAnimation.listener(),
     conclusionText,
     (ctx: CanvasRenderingContext2D) => {

@@ -147,11 +147,12 @@ export default function introScene(onComplete: () => void) {
     | MessageComponent
     | FadingTextComponent
   )[] = [
-    new PretendCallbackAnimationController(() => {}, true),
-    new FadingTextComponent("First, we start with black.", 4000),
+    new FadingTextComponent("First, we start with black.", 4000).withAudio(
+      "2025-04-02 21-28-22.mp3"
+    ),
     new FadingTextComponent(
       "Everything comes from nothing. With nothing.",
-      4000
+      5000
     ),
     new TimeBasedAnimationController("sine", 2000, 1, 0).observeWhileRunning(
       (x) => {
@@ -166,7 +167,9 @@ export default function introScene(onComplete: () => void) {
     ).observeWhileRunning((x) => {
       dotsAlpha = x;
     }),
-    new FadingTextComponent("Yet, we still have differences.", 2000),
+    new FadingTextComponent("Yet, we still have differences.", 3000).withAudio(
+      "2025-04-02 21-29-16.mp3"
+    ),
     new TimeBasedAnimationController(
       "ease-in-out",
       3000,
@@ -175,7 +178,10 @@ export default function introScene(onComplete: () => void) {
     ).observeWhileRunning((x) => {
       dotsGray = x;
     }),
-    new FadingTextComponent("Differences that God created us with.", 2000),
+    new FadingTextComponent(
+      "Differences that God created us with.",
+      2000
+    ).withAudio("2025-04-02 21-29-37.mp3"),
     new PretendCallbackAnimationController(() => {
       redBody.setEnabled(true);
       blueBody.setEnabled(true);
@@ -194,16 +200,16 @@ export default function introScene(onComplete: () => void) {
     }),
     new FadingTextComponent(
       "And as we go about daily life, people and places express bias because of those differences.",
-      4000
-    ),
-    new TimeBasedAnimationController("linear", 5000, 0, 0),
+      8000
+    ).withAudio("2025-04-02 21-31-25.mp3"),
+    new TimeBasedAnimationController("linear", 3000, 0, 0),
     new FadingTextComponent(
       "In many places, judgments are made and biases are created because of these differences:",
-      2000
-    ),
+      5000
+    ).withAudio("2025-04-02 21-32-03.mp3"),
     new FadingTextComponent(
       "differences of simply perceived race or ethnicity.",
-      4000
+      5000
     ),
     new TimeBasedAnimationController("linear", 2000, 0, 0),
     new PretendCallbackAnimationController(() => {
@@ -221,15 +227,17 @@ export default function introScene(onComplete: () => void) {
     (thisIsText = new FadingTextComponent(
       "This is racial discrimination.",
       10000
-    )),
+    ).withAudio("2025-04-02 21-34-29.mp3")),
     new FadingTextComponent(
       "Like the slope causing the bouncing balls to bounce in different directions, unconscious and conscious judgments are made towards people because of their properties.",
-      6000
-    ).onClose(() => {
-      setTimeout(() => {
-        onComplete();
-      }, 500);
-    }),
+      10000
+    )
+      .withAudio("2025-04-02 21-34-38.mp3")
+      .onClose(() => {
+        setTimeout(() => {
+          onComplete();
+        }, 1000);
+      }),
   ];
 
   sequenceAnimations(animations);

@@ -2,11 +2,13 @@ import { UpdateInfo } from "../../framework/components/Component";
 import Container from "../../framework/components/Container";
 import InterruptableAnimationController from "../../framework/controllers/InterruptableAnimationController";
 import { CANVAS_HEIGHT, CANVAS_WIDTH, FONT } from "../gameRoot";
+import { playAudio } from "./audio";
 import { wrapCanvasLines } from "./MessageComponent";
 
 export default class FadingTextComponent extends Container {
   private animationController: InterruptableAnimationController;
   private verseReference?: string;
+  private audioName?: string;
 
   public isShowing: boolean = false;
 
@@ -105,6 +107,7 @@ export default class FadingTextComponent extends Container {
   show() {
     this.isShowing = true;
     this.animationController.animateTo(1);
+    if (this.audioName) playAudio(this.audioName);
     setTimeout(() => {
       this.hide();
     }, this.durationMs);
@@ -134,6 +137,11 @@ export default class FadingTextComponent extends Container {
 
   withVerseReference(verseReference: string): this {
     this.verseReference = verseReference;
+    return this;
+  }
+
+  withAudio(audioName: string): this {
+    this.audioName = audioName;
     return this;
   }
 }

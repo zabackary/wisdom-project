@@ -20,6 +20,7 @@
     "vite-plugin-wasm": "^3.4.1"
   },
   "dependencies": {
-    "@dimforge/rapier2d": "^0.15.0"
+    "@dimforge/rapier2d": "^0.15.0",
+    "@shortercode/webzip": "1.1.1-0"
   }
 }

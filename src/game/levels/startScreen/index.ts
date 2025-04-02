@@ -1,14 +1,14 @@
+import { ZipArchive } from "@shortercode/webzip";
 import TextComponent, {
   HorizontalAlignment,
 } from "../../../framework/components/TextComponent";
 import TimeBasedAnimationController from "../../../framework/controllers/TimeBasedAnimationController";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../gameRoot";
+import { setAudioZip } from "../../utils/audio";
 import MessageComponent from "../../utils/MessageComponent";
 import RoundedButtonComponent from "../../utils/RoundedButtonComponent";
 import citations from "./citations.txt?raw";
 import projectExplanation from "./projectExplanation.txt?raw";
-
-// filepath: /home/zabackary/projects/wisdom-project/src/game/levels/startScreen.ts
 
 export default function startScreen(isFirstTime: boolean, onStart: () => void) {
   let aboutMessage = new MessageComponent(
@@ -16,15 +16,31 @@ export default function startScreen(isFirstTime: boolean, onStart: () => void) {
     projectExplanation,
     false
   );
-  let citationsMessage = new MessageComponent(
-    "Citations",
-    citations,
-    true
-  );
+  let citationsMessage = new MessageComponent("Citations", citations, true);
+  let audio = new MessageComponent(
+    "About audio",
+    "Please upload the zip file containing the audio files, which is not bundled for privacy reasons. Press the button above to connect the audio files.",
+    false
+  ).onClose(() => {
+    const audioInput = document.createElement("input");
+    audioInput.type = "file";
+    audioInput.accept = ".zip";
+    audioInput.onchange = (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (file) {
+        ZipArchive.from_blob(file).then((zip) => {
+          setAudioZip(zip);
+        });
+      }
+    };
+    audioInput.click();
+  });
   return [
     // Fade-in effect for the title
     new TextComponent(
-      isFirstTime ? "hokma and hevel in racial discrimination" : "thank you for watching",
+      isFirstTime
+        ? "hokma and hevel in racial discrimination"
+        : "thank you for watching",
       {
         fontSize: 40,
         textAlign: HorizontalAlignment.Center,
@@ -69,7 +85,9 @@ export default function startScreen(isFirstTime: boolean, onStart: () => void) {
       isFirstTime ? "Watch" : "Rewatch"
     ),
     new TextComponent(
-      isFirstTime ? "created by zachary c · q3 2025 · caj wisdom 10/11" : "citations and about can be found in the bottom left",
+      isFirstTime
+        ? "created by zachary c · q3 2025 · caj wisdom 10/11"
+        : "citations and about can be found in the bottom left",
       {
         fontSize: 18,
         textAlign: HorizontalAlignment.Center,
@@ -165,7 +183,7 @@ export default function startScreen(isFirstTime: boolean, onStart: () => void) {
       "#000000", // borderColor
       1, // borderWidth
       () => {
-        alert("Not implemented");
+        audio.show();
       },
       "connect audio files",
       {
@@ -174,5 +192,6 @@ export default function startScreen(isFirstTime: boolean, onStart: () => void) {
     ),
     aboutMessage,
     citationsMessage,
+    audio,
   ];
 }
